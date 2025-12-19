@@ -8,8 +8,8 @@
      ========================================================================== */
   const CONFIG = {
     // API Placeholders - Empty strings by default as requested
-    API_CHAT_URL: "",
-    API_LEAD_URL: "",
+    API_CHAT_URL: "https://n8n.srv1084037.hstgr.cloud/webhook-test/cb02bb42-8842-48a9-b631-dc1d3d5aebde",
+    API_LEAD_URL: "https://n8n.srv1084037.hstgr.cloud/webhook-test/7387082c-a072-4b6a-8364-7876b2a60045",
 
     // UI Config
     TITLE: "Three Royals Media Support",
@@ -1311,6 +1311,7 @@
 
     const payload = {
       event: 'chat_message',
+      type: 'Normal/FAQ', // Added for n8n routing
       sessionId: getSessionId(),
       pageUrl: pageUrl || window.location.href,
       timestamp: new Date().toISOString(),
@@ -1346,6 +1347,7 @@
       payload = {
         ...basePayload,
         event: 'booking_submit',
+        type: 'Appointment', // Added for n8n routing
         booking: {
           date: data.date,
           time: data.time,
@@ -1364,6 +1366,7 @@
       payload = {
         ...basePayload,
         event: 'lead_submit',
+        type: 'Leave Message', // Added for n8n routing
         lead: {
           name: data.name,
           email: data.email,
