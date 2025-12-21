@@ -751,12 +751,6 @@
     if (leaveFlag === true) {
       setTimeout(() => handleShowLeadForm(), 400);
     }
-
-    // If AI says it can't answer, open Leave Message form
-    if (ai["Leave Message"] === true) {
-      // Small delay so the user sees the AI response first
-      setTimeout(() => handleShowLeadForm(), 400);
-    }
   }
 
   function showTypingIndicator() {
