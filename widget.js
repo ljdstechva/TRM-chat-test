@@ -477,7 +477,8 @@
     messages: [],
     isTyping: false,
     hasInteracted: false,
-    activeFlow: null // 'lead' | 'booking' | null
+    activeFlow: null, // 'lead' | 'booking' | null
+    isProcessing: false // Lock to prevent duplicate submissions
   };
 
   // DOM Elements
@@ -705,7 +706,7 @@
   }
 
   async function handleUserMessage(textOverride) {
-    if (STATE.activeFlow) {
+    if (STATE.activeFlow || STATE.isProcessing) {
       handleInteractionCheck({ preventDefault: () => { }, stopPropagation: () => { } });
       return;
     }
@@ -714,68 +715,90 @@
     if (!text) return;
 
     if (!textOverride) inputField.value = '';
+
+    // Set lock
+    STATE.isProcessing = true;
+
     addMessage({ text, type: 'user' });
 
     // Typing indicator while waiting for backend
-    await showTypingIndicator();
+    startTypingIndicator();
 
-    // Call n8n and WAIT for the response
-    const ai = await sendChatToBackend(text, STATE.messages, window.location.href);
+    try {
+      // Call n8n and WAIT for the response
+      const ai = await sendChatToBackend(text, STATE.messages, window.location.href);
 
-    // Accept multiple possible key names from n8n
-    const botText =
-      ai?.Message ??
-      ai?.message ??
-      ai?.reply ??
-      ai?.output ??
-      ai?.text ??
-      null;
+      // Stop typing
+      stopTypingIndicator();
 
-    const leaveFlag =
-      ai?.["Leave Message"] ??
-      ai?.leaveMessage ??
-      ai?.leave_message ??
-      false;
+      // Accept multiple possible key names from n8n
+      const botText =
+        ai?.Message ??
+        ai?.message ??
+        ai?.reply ??
+        ai?.output ??
+        ai?.text ??
+        null;
 
-    if (!botText || typeof botText !== "string") {
-      addMessage({
-        text: "Sorry — I’m not getting a reply right now. Please try again, or tap ‘Leave a message’ so our team can follow up.",
-        type: "bot",
-      });
-      return;
-    }
+      const leaveFlag =
+        ai?.["Leave Message"] ??
+        ai?.leaveMessage ??
+        ai?.leave_message ??
+        false;
 
-    addMessage({ text: botText, type: "bot" });
+      if (!botText || typeof botText !== "string") {
+        addMessage({
+          text: "Sorry — I’m not getting a reply right now. Please try again, or tap ‘Leave a message’ so our team can follow up.",
+          type: "bot",
+        });
+        return;
+      }
 
-    // If AI says to collect details, open the lead form
-    if (leaveFlag === true) {
-      setTimeout(() => handleShowLeadForm(), 400);
+      addMessage({ text: botText, type: "bot" });
+
+      // If AI says to collect details, open the lead form
+      if (leaveFlag === true) {
+        setTimeout(() => handleShowLeadForm(), 400);
+      }
+    } catch (err) {
+      console.error("Error in handleUserMessage:", err);
+      stopTypingIndicator();
+      addMessage({ text: "Something went wrong. Please try again.", type: "bot" });
+    } finally {
+      // Release lock
+      STATE.isProcessing = false;
+      // Re-focus input for convenience
+      if (!STATE.activeFlow) setTimeout(() => inputField.focus(), 100);
     }
   }
 
-  function showTypingIndicator() {
+  function startTypingIndicator() {
+    if (STATE.isTyping) return;
+
+    // Remove any existing (just in case)
+    stopTypingIndicator();
+
+    const typingEl = document.createElement('div');
+    typingEl.className = 'trm-typing';
+    typingEl.innerHTML = '<div class="trm-dot"></div><div class="trm-dot"></div><div class="trm-dot"></div>';
+    messagesList.appendChild(typingEl);
+    scrollToBottom();
+    STATE.isTyping = true;
+  }
+
+  function stopTypingIndicator() {
+    const existing = messagesList.querySelector('.trm-typing');
+    if (existing) existing.remove();
+    STATE.isTyping = false;
+  }
+
+  function localFakeTyping(ms = 800) {
     return new Promise(resolve => {
-      // Remove any existing typing indicators
-      const existing = messagesList.querySelector('.trm-typing');
-      if (existing) existing.remove();
-
-      const typingEl = document.createElement('div');
-      typingEl.className = 'trm-typing';
-      typingEl.innerHTML = '<div class="trm-dot"></div><div class="trm-dot"></div><div class="trm-dot"></div>';
-      messagesList.appendChild(typingEl);
-      scrollToBottom();
-      STATE.isTyping = true;
-
-      // Random delay 600-900ms
-      const delay = Math.floor(Math.random() * 300) + 600;
-
+      startTypingIndicator();
       setTimeout(() => {
-        if (typingEl && typingEl.parentNode) {
-          typingEl.parentNode.removeChild(typingEl);
-        }
-        STATE.isTyping = false;
+        stopTypingIndicator();
         resolve();
-      }, delay);
+      }, ms);
     });
   }
 
@@ -783,7 +806,7 @@
 
   function handleShowFAQs() {
     // Show typing then list FAQs
-    showTypingIndicator().then(() => {
+    localFakeTyping(600).then(() => {
       addMessage({ text: "Here are some common topics:", type: 'bot' });
 
       const faqContainer = document.createElement('div');
@@ -892,7 +915,7 @@
       formContainer.innerHTML = `<div style="color:green; font-weight:500;">✓ Sent successfully</div>`;
       endFlow();
 
-      showTypingIndicator().then(() => {
+      localFakeTyping(600).then(() => {
         addMessage({
           text: "Thanks — we’ve received your message and will follow up soon.",
           type: 'bot'
@@ -975,7 +998,7 @@
     STATE.activeFlow = 'booking';
     toggleInputLock(true);
 
-    showTypingIndicator().then(() => {
+    localFakeTyping(600).then(() => {
       addMessage({ text: "Please select a date for your appointment:", type: 'bot' });
       renderCalendar();
     });
@@ -1149,7 +1172,7 @@
     addMessage({ text: `Date selected: ${dateStr}`, type: 'user' });
 
     setTimeout(() => {
-      showTypingIndicator().then(() => {
+      localFakeTyping(600).then(() => {
         addMessage({ text: "Here are the available times (in your timezone):", type: 'bot' });
         renderTimeSlots(year, month, day);
       });
@@ -1210,7 +1233,7 @@
 
     addMessage({ text: `I'd like to book for ${timeStr}`, type: 'user' });
 
-    showTypingIndicator().then(() => {
+    localFakeTyping(600).then(() => {
       addMessage({ text: "Great — please confirm your details so we can book this for you.", type: 'bot' });
       renderBookingForm(year, month, day, timeStr, fullDate);
     });
@@ -1278,7 +1301,7 @@
 
       endFlow();
 
-      showTypingIndicator().then(() => {
+      localFakeTyping(600).then(() => {
         addMessage({
           text: "Perfect! I've scheduled that for you. You'll receive a confirmation shortly.",
           type: 'bot'
