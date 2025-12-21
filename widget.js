@@ -34,6 +34,48 @@
     }
   };
 
+  // Common countries list (Compressed for brevity but covers major regions)
+  const COUNTRIES = [
+    { code: 'US', dial: '+1', name: 'United States', flag: '🇺🇸' },
+    { code: 'GB', dial: '+44', name: 'United Kingdom', flag: '🇬🇧' },
+    { code: 'CA', dial: '+1', name: 'Canada', flag: '🇨🇦' },
+    { code: 'AU', dial: '+61', name: 'Australia', flag: '🇦🇺' },
+    { code: 'DE', dial: '+49', name: 'Germany', flag: '🇩🇪' },
+    { code: 'FR', dial: '+33', name: 'France', flag: '🇫🇷' },
+    { code: 'IT', dial: '+39', name: 'Italy', flag: '🇮🇹' },
+    { code: 'ES', dial: '+34', name: 'Spain', flag: '🇪🇸' },
+    { code: 'BR', dial: '+55', name: 'Brazil', flag: '🇧🇷' },
+    { code: 'MX', dial: '+52', name: 'Mexico', flag: '🇲🇽' },
+    { code: 'IN', dial: '+91', name: 'India', flag: '🇮🇳' },
+    { code: 'CN', dial: '+86', name: 'China', flag: '🇨🇳' },
+    { code: 'JP', dial: '+81', name: 'Japan', flag: '🇯🇵' },
+    { code: 'KR', dial: '+82', name: 'South Korea', flag: '🇰🇷' },
+    { code: 'RU', dial: '+7', name: 'Russia', flag: '🇷🇺' },
+    { code: 'ZA', dial: '+27', name: 'South Africa', flag: '🇿🇦' },
+    { code: 'NG', dial: '+234', name: 'Nigeria', flag: '🇳🇬' },
+    { code: 'EG', dial: '+20', name: 'Egypt', flag: '🇪🇬' },
+    { code: 'AE', dial: '+971', name: 'United Arab Emirates', flag: '🇦🇪' },
+    { code: 'SA', dial: '+966', name: 'Saudi Arabia', flag: '🇸🇦' },
+    { code: 'PH', dial: '+63', name: 'Philippines', flag: '🇵🇭' },
+    { code: 'SG', dial: '+65', name: 'Singapore', flag: '🇸🇬' },
+    { code: 'ID', dial: '+62', name: 'Indonesia', flag: '🇮🇩' },
+    { code: 'MY', dial: '+60', name: 'Malaysia', flag: '🇲🇾' },
+    { code: 'TH', dial: '+66', name: 'Thailand', flag: '🇹🇭' },
+    { code: 'VN', dial: '+84', name: 'Vietnam', flag: '🇻🇳' },
+    { code: 'NL', dial: '+31', name: 'Netherlands', flag: '🇳🇱' },
+    { code: 'BE', dial: '+32', name: 'Belgium', flag: '🇧🇪' },
+    { code: 'SE', dial: '+46', name: 'Sweden', flag: '🇸🇪' },
+    { code: 'NO', dial: '+47', name: 'Norway', flag: '🇳🇴' },
+    { code: 'DK', dial: '+45', name: 'Denmark', flag: '🇩🇰' },
+    { code: 'FI', dial: '+358', name: 'Finland', flag: '🇫🇮' },
+    { code: 'PL', dial: '+48', name: 'Poland', flag: '🇵🇱' },
+    { code: 'TR', dial: '+90', name: 'Turkey', flag: '🇹🇷' },
+    { code: 'IL', dial: '+972', name: 'Israel', flag: '🇮🇱' },
+    { code: 'NZ', dial: '+64', name: 'New Zealand', flag: '🇳🇿' },
+    { code: 'IE', dial: '+353', name: 'Ireland', flag: '🇮🇪' },
+    // Add more as needed
+  ];
+
   /* ==========================================================================
      STYLES (CSS Injection)
      ========================================================================== */
@@ -985,48 +1027,6 @@
     STATE.activeFlow = 'lead';
     toggleInputLock(true);
 
-    // Common countries list (Compressed for brevity but covers major regions)
-    const COUNTRIES = [
-      { code: 'US', dial: '+1', name: 'United States', flag: '🇺🇸' },
-      { code: 'GB', dial: '+44', name: 'United Kingdom', flag: '🇬🇧' },
-      { code: 'CA', dial: '+1', name: 'Canada', flag: '🇨🇦' },
-      { code: 'AU', dial: '+61', name: 'Australia', flag: '🇦🇺' },
-      { code: 'DE', dial: '+49', name: 'Germany', flag: '🇩🇪' },
-      { code: 'FR', dial: '+33', name: 'France', flag: '🇫🇷' },
-      { code: 'IT', dial: '+39', name: 'Italy', flag: '🇮🇹' },
-      { code: 'ES', dial: '+34', name: 'Spain', flag: '🇪🇸' },
-      { code: 'BR', dial: '+55', name: 'Brazil', flag: '🇧🇷' },
-      { code: 'MX', dial: '+52', name: 'Mexico', flag: '🇲🇽' },
-      { code: 'IN', dial: '+91', name: 'India', flag: '🇮🇳' },
-      { code: 'CN', dial: '+86', name: 'China', flag: '🇨🇳' },
-      { code: 'JP', dial: '+81', name: 'Japan', flag: '🇯🇵' },
-      { code: 'KR', dial: '+82', name: 'South Korea', flag: '🇰🇷' },
-      { code: 'RU', dial: '+7', name: 'Russia', flag: '🇷🇺' },
-      { code: 'ZA', dial: '+27', name: 'South Africa', flag: '🇿🇦' },
-      { code: 'NG', dial: '+234', name: 'Nigeria', flag: '🇳🇬' },
-      { code: 'EG', dial: '+20', name: 'Egypt', flag: '🇪🇬' },
-      { code: 'AE', dial: '+971', name: 'United Arab Emirates', flag: '🇦🇪' },
-      { code: 'SA', dial: '+966', name: 'Saudi Arabia', flag: '🇸🇦' },
-      { code: 'PH', dial: '+63', name: 'Philippines', flag: '🇵🇭' },
-      { code: 'SG', dial: '+65', name: 'Singapore', flag: '🇸🇬' },
-      { code: 'ID', dial: '+62', name: 'Indonesia', flag: '🇮🇩' },
-      { code: 'MY', dial: '+60', name: 'Malaysia', flag: '🇲🇾' },
-      { code: 'TH', dial: '+66', name: 'Thailand', flag: '🇹🇭' },
-      { code: 'VN', dial: '+84', name: 'Vietnam', flag: '🇻🇳' },
-      { code: 'NL', dial: '+31', name: 'Netherlands', flag: '🇳🇱' },
-      { code: 'BE', dial: '+32', name: 'Belgium', flag: '🇧🇪' },
-      { code: 'SE', dial: '+46', name: 'Sweden', flag: '🇸🇪' },
-      { code: 'NO', dial: '+47', name: 'Norway', flag: '🇳🇴' },
-      { code: 'DK', dial: '+45', name: 'Denmark', flag: '🇩🇰' },
-      { code: 'FI', dial: '+358', name: 'Finland', flag: '🇫🇮' },
-      { code: 'PL', dial: '+48', name: 'Poland', flag: '🇵🇱' },
-      { code: 'TR', dial: '+90', name: 'Turkey', flag: '🇹🇷' },
-      { code: 'IL', dial: '+972', name: 'Israel', flag: '🇮🇱' },
-      { code: 'NZ', dial: '+64', name: 'New Zealand', flag: '🇳🇿' },
-      { code: 'IE', dial: '+353', name: 'Ireland', flag: '🇮🇪' },
-      // Add more as needed
-    ];
-
     // Default Selection
     let selectedCountry = COUNTRIES.find(c => c.code === 'US') || COUNTRIES[0];
 
@@ -1505,6 +1505,9 @@
   }
 
   function renderBookingForm(year, month, day, timeStr, fullDate) {
+    // Default Selection
+    let selectedCountry = COUNTRIES.find(c => c.code === 'US') || COUNTRIES[0];
+
     const formContainer = document.createElement('div');
     formContainer.className = 'trm-message trm-bot';
     formContainer.style.width = '90%';
@@ -1520,7 +1523,29 @@
         <form class="trm-form" id="trm-booking-form">
             <input class="trm-form-field" name="name" placeholder="Name *" required />
             <input class="trm-form-field" name="email" type="email" placeholder="Email" />
-            <input class="trm-form-field" name="phone" type="tel" placeholder="Phone" />
+            
+            <!-- Custom Phone Input with Country Picker -->
+            <div class="trm-phone-group">
+               <div class="trm-country-trigger" id="trm-country-trigger-booking">
+                  <span class="trm-country-flag">${selectedCountry.flag}</span>
+                  <span class="trm-country-code-text">${selectedCountry.dial}</span>
+                  <svg width="10" height="6" viewBox="0 0 10 6" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M1 1L5 5L9 1"/>
+                  </svg>
+               </div>
+               <!-- Hidden dropdown -->
+               <div class="trm-country-dropdown" id="trm-country-dropdown-booking">
+                  <div class="trm-country-search">
+                     <input type="text" placeholder="Search country..." id="trm-country-search-input-booking">
+                  </div>
+                  <div class="trm-country-list" id="trm-country-list-booking">
+                     <!-- Options injected via JS -->
+                  </div>
+               </div>
+
+               <input class="trm-form-field" name="phone_local" type="tel" placeholder="Phone Number" style="flex:1;" />
+            </div>
+
             <textarea class="trm-form-field" name="notes" rows="2" placeholder="Notes (optional)"></textarea>
             
             <div class="trm-error" id="trm-booking-error">Please provide Name and at least one contact method.</div>
@@ -1531,9 +1556,67 @@
     messagesList.appendChild(formContainer);
     scrollToBottom();
 
+    // -- Picker Logic (Duplicate logic, scoped to this container) -- //
+    const trigger = formContainer.querySelector('#trm-country-trigger-booking');
+    const dropdown = formContainer.querySelector('#trm-country-dropdown-booking');
+    const searchInput = formContainer.querySelector('#trm-country-search-input-booking');
+    const list = formContainer.querySelector('#trm-country-list-booking');
+    const flagSpan = trigger.querySelector('.trm-country-flag');
+    const codeSpan = trigger.querySelector('.trm-country-code-text');
+
+    function renderCountryList(filterText = '') {
+      list.innerHTML = '';
+      const lowerFilter = filterText.toLowerCase();
+      COUNTRIES.forEach(c => {
+        if (!c.name.toLowerCase().includes(lowerFilter) && !c.code.toLowerCase().includes(lowerFilter) && !c.dial.includes(lowerFilter)) {
+          return;
+        }
+        const item = document.createElement('div');
+        item.className = 'trm-country-option';
+        if (c.code === selectedCountry.code) item.classList.add('selected');
+        item.innerHTML = `
+          <span class="trm-country-option-flag">${c.flag}</span>
+          <span class="trm-country-option-name">${c.name}</span>
+          <span class="trm-country-option-dial">${c.dial}</span>
+        `;
+        item.onclick = () => {
+          selectedCountry = c;
+          flagSpan.textContent = c.flag;
+          codeSpan.textContent = c.dial;
+          dropdown.classList.remove('open');
+        };
+        list.appendChild(item);
+      });
+    }
+
+    // Initial Render
+    renderCountryList();
+
+    // Event Listeners
+    trigger.onclick = (e) => {
+      e.stopPropagation();
+      dropdown.classList.toggle('open');
+      if (dropdown.classList.contains('open')) {
+        searchInput.focus();
+      }
+    };
+
+    searchInput.onclick = (e) => e.stopPropagation();
+    searchInput.oninput = (e) => renderCountryList(e.target.value);
+
+    // Close on click outside
+    const closeDropdown = (e) => {
+      if (!trigger.contains(e.target) && !dropdown.contains(e.target)) {
+        dropdown.classList.remove('open');
+      }
+    };
+    document.addEventListener('click', closeDropdown);
+
+
     // Bind Cancel
     const cancelBtn = formContainer.querySelector('.trm-cancel-btn');
     cancelBtn.onclick = () => {
+      document.removeEventListener('click', closeDropdown);
       formContainer.remove();
       addMessage({ text: "Booking cancelled. Is there anything else I can help with?", type: 'bot' });
       endFlow();
@@ -1545,7 +1628,21 @@
     form.addEventListener('submit', (e) => {
       e.preventDefault();
       const formData = new FormData(form);
-      const data = Object.fromEntries(formData.entries());
+      const rawData = Object.fromEntries(formData.entries());
+
+      // Prepare data
+      const data = {
+        name: rawData.name,
+        email: rawData.email,
+        phone: '',
+        notes: rawData.notes
+      };
+
+      // Process Phone
+      if (rawData.phone_local) {
+        const cleanLocal = rawData.phone_local.replace(/^0+/, '');
+        data.phone = selectedCountry.dial + cleanLocal;
+      }
 
       // Validation
       const hasContact = data.email || data.phone;
@@ -1553,6 +1650,9 @@
         form.querySelector('.trm-error').classList.add('visible');
         return;
       }
+
+      // Cleanup
+      document.removeEventListener('click', closeDropdown);
 
       // Success UI
       formContainer.innerHTML = `
