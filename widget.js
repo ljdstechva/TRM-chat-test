@@ -1096,6 +1096,7 @@
 
     // Default Selection
     let selectedCountry = COUNTRIES.find(c => c.code === 'US') || COUNTRIES[0];
+    let userInteracted = false;
 
     // Append form to messages
     const formContainer = document.createElement('div');
@@ -1167,6 +1168,7 @@
           <span class="trm-country-option-dial">${c.dial}</span>
         `;
         item.onclick = () => {
+          userInteracted = true;
           selectedCountry = c;
           flagSpan.textContent = c.flag;
           codeSpan.textContent = c.dial;
@@ -1178,6 +1180,22 @@
 
     // Initial Render
     renderCountryList();
+
+    // Auto-detect Country
+    fetch('https://ipapi.co/json/')
+      .then(res => res.json())
+      .then(data => {
+        if (!userInteracted && data && data.country_code) {
+          const detected = COUNTRIES.find(c => c.code === data.country_code);
+          if (detected) {
+            selectedCountry = detected;
+            flagSpan.textContent = detected.flag;
+            codeSpan.textContent = detected.dial;
+            renderCountryList(); // Re-render to update selection highlight
+          }
+        }
+      })
+      .catch(() => { /* Ignore errors, keep default */ });
 
     // Event Listeners
     trigger.onclick = (e) => {
